@@ -7,7 +7,7 @@ eureka:
   instance:
     hostname: replica2
   client:
-    fetch-registry: false
-    register-with-eureka: false
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
       defaultZone: http://replica1:8002/eureka/
