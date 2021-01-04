@@ -69,10 +69,18 @@ public class HelloController {
     }
   }
 
+  /**
+   * 在ctx close之前，缓存是有效的，close之后，缓存就失效了。访问一次接口，provider只会被调用一次(第二次使用的缓存)，
+   * 如果再次调用，之前缓存的数据是失效的。
+   */
   @GetMapping("/hello4")
   public void hello4(){
     HystrixRequestContext ctx = HystrixRequestContext.initializeContext();
+    //第一次请求完，数据已经缓存下来了
     String zhang = helloService.hello3("zhang");
+    //删除数据，同时缓存中的数据也会被删除
+    helloService.deleteUserByName("zhang");
+    //在第二次请求时，虽然参数还是zhang，但是缓存数据已经没了，所以这一次provider还是会收到请求
     zhang = helloService.hello3("zhang");
     ctx.close();
   }

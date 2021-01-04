@@ -13,10 +13,12 @@ import org.springframework.web.client.RestTemplate;
 public class HelloCommand extends HystrixCommand<String> {
 
   RestTemplate restTemplate;
+  String name;
 
   public HelloCommand(Setter setter,RestTemplate restTemplate) {
     super(setter);
     this.restTemplate = restTemplate;
+    this.name = name;
   }
 
   @Override
@@ -31,5 +33,15 @@ public class HelloCommand extends HystrixCommand<String> {
   @Override
   protected String getFallback() {
     return "error-extends" + getExecutionException().getMessage();
+  }
+
+  /**
+   * 如果继承的方式使用Hystrix，只需要重写getCacheKey方法即可
+   * 调用时，初始化HystrixRequestContext
+   * @return
+   */
+  @Override
+  protected String getCacheKey() {
+    return name;
   }
 }
