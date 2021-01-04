@@ -16,6 +16,7 @@ public class ConsumerApplication {
     }
 
     @Bean
+    @LoadBalanced
     RestTemplate restTemplate(){
         return new RestTemplate();
     }

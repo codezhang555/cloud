@@ -21,4 +21,9 @@ public class HelloController {
     public String hello(){
         return "hello" + port;
     }
+
+    @GetMapping("/hello2")
+    public String hello2(String name){
+        return "hello" + name;
+    }
 }

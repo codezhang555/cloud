@@ -1,6 +1,7 @@
 package cn.itz.cloud.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class UserHelloController {
     @Autowired
     DiscoveryClient discoveryClient;
     @Autowired
+    @Qualifier("restTemplate")
     RestTemplate restTemplate;
 
     @GetMapping("/hello1")
@@ -88,5 +90,10 @@ public class UserHelloController {
         sb.append("http://").append(host).append(":").append(port).append("/hello");
         String s = restTemplate.getForObject(sb.toString(), String.class);
         return s;
+    }
+
+    @GetMapping("/hello4")
+    public String hello4(){
+        return restTemplate.getForObject("http://provider/hello",String.class);
     }
 }
