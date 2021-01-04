@@ -1,7 +1,10 @@
 package cn.itz.cloud.controller;
 
+import cn.itz.cloud.User;
 import cn.itz.cloud.config.HelloCommand;
+import cn.itz.cloud.config.UserCollapseCommand;
 import cn.itz.cloud.service.HelloService;
+import cn.itz.cloud.service.UserService;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
@@ -28,6 +31,9 @@ public class HelloController {
 
   @Autowired
   RestTemplate restTemplate;
+
+  @Autowired
+  UserService userService;
 
   @GetMapping("/hello")
   public String hello(){
@@ -82,6 +88,33 @@ public class HelloController {
     helloService.deleteUserByName("zhang");
     //在第二次请求时，虽然参数还是zhang，但是缓存数据已经没了，所以这一次provider还是会收到请求
     zhang = helloService.hello3("zhang");
+    ctx.close();
+  }
+
+  @GetMapping("/hello5")
+  public void hello5() throws ExecutionException, InterruptedException {
+    HystrixRequestContext ctx = HystrixRequestContext.initializeContext();
+    UserCollapseCommand cmd1 = new UserCollapseCommand(userService, 99);
+    UserCollapseCommand cmd2 = new UserCollapseCommand(userService, 98);
+    UserCollapseCommand cmd3 = new UserCollapseCommand(userService, 97);
+    UserCollapseCommand cmd4 = new UserCollapseCommand(userService, 96);
+    Future<User> q1 = cmd1.queue();
+    Future<User> q2 = cmd2.queue();
+    Future<User> q3 = cmd3.queue();
+    Future<User> q4 = cmd4.queue();
+    User u1 = q1.get();
+    User u2 = q2.get();
+    User u3 = q3.get();
+    User u4 = q4.get();
+    System.out.println(u1);
+    System.out.println(u2);
+    System.out.println(u3);
+    System.out.println(u4);
+    Thread.sleep(2 );
+    UserCollapseCommand cmd5 = new UserCollapseCommand(userService, 95);
+    Future<User> q5 = cmd5.queue();
+    User u5 = q5.get();
+    System.out.println(u5);
     ctx.close();
   }
 }
