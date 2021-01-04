@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
@@ -145,5 +147,20 @@ public class UserHelloController {
         user.setId(98);
         user= restTemplate.postForObject("http://provider/user2", user, User.class);
         System.out.println(user);
+    }
+
+    /**
+     * postLocation，调用该方法返回的是一个Uri,这个Uri就是重定向的地址(里面也包含了重定向的参数)，
+     * 拿到Uri之后，就可以直接发送新的请求了。
+     */
+    @GetMapping("/hello7")
+    public void hello7(){
+        LinkedMultiValueMap<Object, Object> map = new LinkedMultiValueMap<>();
+        map.add("name","zhang");
+        map.add("password","123");
+        map.add("id",99);
+        URI uri = restTemplate.postForLocation("http://provider/register", map);
+        String s = restTemplate.getForObject(uri, String.class);
+        System.out.println(s);
     }
 }
