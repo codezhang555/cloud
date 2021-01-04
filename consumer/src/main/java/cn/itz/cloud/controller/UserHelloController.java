@@ -1,5 +1,6 @@
 package cn.itz.cloud.controller;
 
+import cn.itz.cloud.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
@@ -7,6 +8,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +19,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.CoderMalfunctionError;
 import java.util.List;
 import java.util.Set;
 
@@ -97,6 +98,10 @@ public class UserHelloController {
         return s;
     }
 
+    /**
+     * Eureka负载均衡调用服务
+     * @return
+     */
     @GetMapping("/hello4")
     public String hello4(){
         return restTemplate.getForObject("http://provider/hello",String.class);
@@ -123,5 +128,22 @@ public class UserHelloController {
         for (String s1 : keySet) {
             System.out.println(s1+":"+headers.get(s1));
         }
+    }
+
+    /**
+     * post参数到底是key-value形式还是json形式，主要看第二个参数，如果第二个参数是multiValueMap,
+     * 则参数是以key-value形式来传递的。如果是一个普通对象，则参数是以json形式来传递的。
+     */
+    @GetMapping("/hello6")
+    public void hello6(){
+        LinkedMultiValueMap<Object, Object> map = new LinkedMultiValueMap<>();
+        map.add("id",99);
+        map.add("name","zhang");
+        map.add("password","123");
+        User user = restTemplate.postForObject("http://provider/user1", map, User.class);
+        System.out.println(user);
+        user.setId(98);
+        user= restTemplate.postForObject("http://provider/user2", user, User.class);
+        System.out.println(user);
     }
 }
