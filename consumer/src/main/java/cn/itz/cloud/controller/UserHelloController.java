@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +17,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.CoderMalfunctionError;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author CodeZhang
@@ -95,5 +100,28 @@ public class UserHelloController {
     @GetMapping("/hello4")
     public String hello4(){
         return restTemplate.getForObject("http://provider/hello",String.class);
+    }
+
+    /**
+     * getForObject返回的是一个对象，这个对象就是服务端返回的具体值。
+     * getForEntity返回的是一个ResponseEntity,这个ResponseEntity中除了服务端返回的具体数据外，还保留了Http响应头的数据。
+     */
+    @GetMapping("/hello5")
+    public void hello5(){
+        String s = restTemplate.getForObject("http://provider/hello2?name={1}", String.class, "zhang");
+        System.out.println(s);
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://provider/hello2?name={1}", String.class, "zhang");
+        String body = responseEntity.getBody();
+        System.out.println("body:"+body);
+        HttpStatus statusCode = responseEntity.getStatusCode();
+        System.out.println("HttpStatus:"+statusCode);
+        int statusCodeValue = responseEntity.getStatusCodeValue();
+        System.out.println("statusCodeValue:"+ statusCodeValue);
+        HttpHeaders headers = responseEntity.getHeaders();
+        Set<String> keySet = headers.keySet();
+        System.out.println("=======header=======");
+        for (String s1 : keySet) {
+            System.out.println(s1+":"+headers.get(s1));
+        }
     }
 }

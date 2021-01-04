@@ -15,6 +15,10 @@ public class ConsumerApplication {
         SpringApplication.run(ConsumerApplication.class, args);
     }
 
+    /**
+     * 加上LoadBalanced无法识别localhost地址，应该访问application.name
+     * @return
+     */
     @Bean
     @LoadBalanced
     RestTemplate restTemplate(){
