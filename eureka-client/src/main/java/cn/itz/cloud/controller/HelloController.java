@@ -2,10 +2,7 @@ package cn.itz.cloud.controller;
 
 import cn.itz.cloud.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author CodeZhang
@@ -50,4 +47,21 @@ public class HelloController {
         return user;
     }
 
+    /**
+     * 以key-value形式传参
+     * @param user
+     */
+    @PutMapping("/user1")
+    public void updateUser1(User user){
+        System.out.println(user);
+    }
+
+    /**
+     * 以json形式传参
+     * @param user
+     */
+    @PutMapping("/user2")
+    public void updateUser2(@RequestBody User user){
+        System.out.println(user);
+    }
 }

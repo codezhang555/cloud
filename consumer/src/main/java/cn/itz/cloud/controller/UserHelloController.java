@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -162,5 +161,24 @@ public class UserHelloController {
         URI uri = restTemplate.postForLocation("http://provider/register", map);
         String s = restTemplate.getForObject(uri, String.class);
         System.out.println(s);
+    }
+
+
+    /**
+     * put参数到底是key-value形式还是json形式，主要看第二个参数，如果第二个参数是multiValueMap,
+     * 则参数是以key-value形式来传递的。如果是一个普通对象，则参数是以json形式来传递的。
+     */
+    @GetMapping("/hello8")
+    public void hello8(){
+        LinkedMultiValueMap<Object, Object> map = new LinkedMultiValueMap<>();
+        map.add("name","zhang");
+        map.add("password","123");
+        map.add("id",99);
+        restTemplate.put("http://provider/user1",map);
+        User user = new User();
+        user.setId(98);
+        user.setName("cheng");
+        user.setPassword("12");
+        restTemplate.put("http://provider/user2",user);
     }
 }
