@@ -5,6 +5,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class UserHelloController {
 
     @Autowired
     DiscoveryClient discoveryClient;
+    @Autowired
+    RestTemplate restTemplate;
 
     @GetMapping("/hello1")
     public String hello1() {
@@ -73,5 +76,17 @@ public class UserHelloController {
             e.printStackTrace();
         }
         return "error";
+    }
+
+    @GetMapping("/hello3")
+    public String hello3(){
+        List<ServiceInstance> provider = discoveryClient.getInstances("provider");
+        ServiceInstance instance = provider.get(0);
+        String host = instance.getHost();
+        int port = instance.getPort();
+        StringBuffer sb = new StringBuffer();
+        sb.append("http://").append(host).append(":").append(port).append("/hello");
+        String s = restTemplate.getForObject(sb.toString(), String.class);
+        return s;
     }
 }
