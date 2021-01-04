@@ -3,7 +3,6 @@ package cn.itz.cloud;
 /**
  * @PackageName: cn.itz.cloud
  * @ClassName: User
- * @Description: TODO
  * @Author: codeZhang
  * @DateTime: 2021/1/4 10:38
  * @Version 1.0
