@@ -64,4 +64,22 @@ public class HelloController {
     public void updateUser2(@RequestBody User user){
         System.out.println(user);
     }
+
+    /**
+     * key-value形式传递参数
+     * @param id
+     */
+    @DeleteMapping("/user1")
+    public void deleteUser1(Integer id){
+        System.out.println(id);
+    }
+
+    /**
+     * PathVariable(参数放在路径中)
+     * @param id
+     */
+    @DeleteMapping("/user2/{id}")
+    public void deleteUser2(@PathVariable Integer id){
+        System.out.println(id);
+    }
 }
