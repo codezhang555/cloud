@@ -1,6 +1,7 @@
 package cn.itz.cloud.service;
 
 import cn.itz.cloud.User;
+import cn.itz.cloud.config.HelloServiceFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * @DateTime: 2021/1/5 8:49
  * @Version 1.0
  */
-@FeignClient("provider")
+@FeignClient(value = "provider",fallback = HelloServiceFallback.class)
 public interface HelloService extends IUserService{
 
   /**
