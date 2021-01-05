@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * 服务降级
  * @PackageName: cn.itz.cloud.config
  * @ClassName: HelloServiceFallback
  * @Author: codeZhang
