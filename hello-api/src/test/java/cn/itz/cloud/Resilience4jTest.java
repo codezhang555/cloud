@@ -51,28 +51,28 @@ public class Resilience4jTest {
    * 由于ringBufferSizeInClosedState的值为2，表示当有两条数据时才会去统计故障率，
    * 所以，至少调用两次onError,断路器才会打开
    */
-  @Test
-  public void test2(){
-    CircuitBreakerConfig config = CircuitBreakerConfig.custom()
-        //故障率阈值百分比，超过这个阈值，断路器就会打开
-        .failureRateThreshold(50)
-        //断路器保持打开的时间，在到达设置的时间之后，断路器会进入到half open状态
-        .waitDurationInOpenState(Duration.ofMillis(1000))
-        //当断路器处于half open状态时，环形缓冲区的大小
-        .ringBufferSizeInClosedState(2)
-        .build();
-    CircuitBreakerRegistry r1 = CircuitBreakerRegistry.of(config);
-    CircuitBreaker cb1 = r1.circuitBreaker("zhang");
-    System.out.println(cb1.getState());  //获取断路器的一个状态
-    cb1.onError(0,new RuntimeException());
-    System.out.println(cb1.getState());  //获取断路器的一个状态
-    cb1.onError(0,new RuntimeException());
-    System.out.println(cb1.getState());  //获取断路器的一个状态
-    CheckedFunction0<String> supplier = CircuitBreaker.decorateCheckedSupplier(cb1,() -> "he11o resilience4");
-    Try<String> result = Try.of(supplier).map(v -> v +"he11o world");
-    System.out.println(result.isSuccess());
-    System.out.println(result.get());
-  }
+//  @Test
+//  public void test2(){
+//    CircuitBreakerConfig config = CircuitBreakerConfig.custom()
+//        //故障率阈值百分比，超过这个阈值，断路器就会打开
+//        .failureRateThreshold(50)
+//        //断路器保持打开的时间，在到达设置的时间之后，断路器会进入到half open状态
+//        .waitDurationInOpenState(Duration.ofMillis(1000))
+//        //当断路器处于half open状态时，环形缓冲区的大小
+//        .ringBufferSizeInClosedState(2)
+//        .build();
+//    CircuitBreakerRegistry r1 = CircuitBreakerRegistry.of(config);
+//    CircuitBreaker cb1 = r1.circuitBreaker("zhang");
+//    System.out.println(cb1.getState());  //获取断路器的一个状态
+//    cb1.onError(0,new RuntimeException());
+//    System.out.println(cb1.getState());  //获取断路器的一个状态
+//    cb1.onError(0,new RuntimeException());
+//    System.out.println(cb1.getState());  //获取断路器的一个状态
+//    CheckedFunction0<String> supplier = CircuitBreaker.decorateCheckedSupplier(cb1,() -> "he11o resilience4");
+//    Try<String> result = Try.of(supplier).map(v -> v +"he11o world");
+//    System.out.println(result.isSuccess());
+//    System.out.println(result.get());
+//  }
 
   @Test
   public void test4(){
