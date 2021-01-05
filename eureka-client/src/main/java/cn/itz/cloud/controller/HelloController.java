@@ -2,6 +2,7 @@ package cn.itz.cloud.controller;
 
 import cn.itz.cloud.User;
 import cn.itz.cloud.service.IUserService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class HelloController implements IUserService {
     Integer port;
 
     @Override
+    @RateLimiter(name="rlA")
     public String hello() {
         String s = "hello:" + port;
         System.out.println(new Date());
