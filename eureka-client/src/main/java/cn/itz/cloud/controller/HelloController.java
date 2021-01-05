@@ -1,6 +1,7 @@
 package cn.itz.cloud.controller;
 
 import cn.itz.cloud.User;
+import cn.itz.cloud.service.IUserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,20 +15,30 @@ import java.util.Date;
  * @date 2021/1/3 16:59
  */
 @RestController
-public class HelloController {
+public class HelloController implements IUserService {
 
     @Value("${server.port}")
     Integer port;
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "hello" + port;
+    @Override
+    public String hello() {
+        return "hello:" + port;
     }
 
-    @GetMapping("/hello2")
-    public String hello2(String name){
+    @Override
+    public String hello2(String name) {
         System.out.println(new Date() + ">>>" + name);
         return "hello" + name;
+    }
+
+    @Override
+    public User addUser(User user) {
+        return user;
+    }
+
+    @Override
+    public void deleteUserById(Integer id) {
+        System.out.println(id);
     }
 
     /**
@@ -45,10 +56,10 @@ public class HelloController {
      * @param user
      * @return
      */
-    @PostMapping("/user2")
-    public User addUser2(@RequestBody User user){
-        return user;
-    }
+//    @PostMapping("/user2")
+//    public User addUser2(@RequestBody User user){
+//        return user;
+//    }
 
     /**
      * 以key-value形式传参
@@ -81,8 +92,8 @@ public class HelloController {
      * PathVariable(参数放在路径中)
      * @param id
      */
-    @DeleteMapping("/user2/{id}")
-    public void deleteUser2(@PathVariable Integer id){
-        System.out.println(id);
-    }
+//    @DeleteMapping("/user2/{id}")
+//    public void deleteUser2(@PathVariable Integer id){
+//        System.out.println(id);
+//    }
 }
