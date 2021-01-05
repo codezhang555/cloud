@@ -3,6 +3,8 @@ package cn.itz.cloud;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import io.vavr.CheckedFunction0;
 import io.vavr.control.Try;
 import org.junit.Test;
@@ -43,6 +45,12 @@ public class Resilience4jTest {
     System.out.println(result.get());
   }
 
+  /**
+   * 一个出异常的断路器
+   *
+   * 由于ringBufferSizeInClosedState的值为2，表示当有两条数据时才会去统计故障率，
+   * 所以，至少调用两次onError,断路器才会打开
+   */
   @Test
   public void test2(){
     CircuitBreakerConfig config = CircuitBreakerConfig.custom()
@@ -64,5 +72,28 @@ public class Resilience4jTest {
     Try<String> result = Try.of(supplier).map(v -> v +"he11o world");
     System.out.println(result.isSuccess());
     System.out.println(result.get());
+  }
+
+  @Test
+  public void test4(){
+    RetryConfig config = RetryConfig.custom()
+        //重试次数
+        .maxAttempts(2)
+        //重试间隔
+        .waitDuration(Duration.ofMillis(500))
+        //重试异常
+        .retryExceptions(RuntimeException.class)
+        .build();
+    Retry retry = Retry.of("zhang", config);
+    Retry.decorateRunnable(retry, new Runnable() {
+      int count = 0;
+      //开启了重试功能之后，run方法执行时，如果抛出异常，会自动触发重试功能
+      @Override
+      public void run() {
+        if (count ++ < 3){
+          throw new RuntimeException();
+        }
+      }
+    }).run();
   }
 }
