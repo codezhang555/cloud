@@ -36,15 +36,11 @@
             <exclusions>
                 <exclusion>
                     <groupId>io.github.resilience4j</groupId>
-                    <artifactId>resilience4j-circuitbreaker</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.github.resilience4j</groupId>
-                    <artifactId>resilience4j-ratelimiter</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.github.resilience4j</groupId>
                     <artifactId>resilience4j-bulkhead</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.github.resilience4j</groupId>
+                    <artifactId>resilience4j-timelimiter</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>io.github.resilience4j</groupId>

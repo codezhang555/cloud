@@ -22,7 +22,9 @@ public class HelloController implements IUserService {
 
     @Override
     public String hello() {
-        return "hello:" + port;
+        String s = "hello:" + port;
+        System.out.println(new Date());
+        return s;
     }
 
     @Override
