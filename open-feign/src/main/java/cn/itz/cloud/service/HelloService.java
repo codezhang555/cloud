@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient("provider")
 public interface HelloService extends IUserService{
 
+  /**
+   * openfeign继承特性：
+   * 1.使用继承特性，代码简洁明了不易出错。服务端和消费端的代码统一，一改俱改，不易出错。这是优点也是缺点，
+   * 这样会提高服务端和消费端的耦合度。
+   * 2.参数传递，在使用了继承之后，依然不变，参数怎么传还是怎么传。
+   */
+
 //  @GetMapping("/hello")
 //  String hello();
 //
