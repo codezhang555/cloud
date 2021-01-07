@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: zhang_route
+          uri: http://httpbin.org
+          predicates:
+            - Path=/get
+      discovery:
+        locator:
+          enabled: true  #\u5F00\u542F\u81EA\u52A8\u4EE3\u7406
+  application:
+    name: gateway
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8001/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway:
+      debug
+server:
+  port: 7100

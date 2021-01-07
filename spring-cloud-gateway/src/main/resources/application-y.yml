@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: zhang_route
+          uri: http://httpbin.org
+          predicates:
+            - Path=/get
