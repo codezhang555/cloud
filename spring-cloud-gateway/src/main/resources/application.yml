@@ -5,10 +5,13 @@ spring:
         - id: zhang_route
           uri: http://httpbin.org
           predicates:
-            - Path=/get
-      discovery:
-        locator:
-          enabled: true  #\u5F00\u542F\u81EA\u52A8\u4EE3\u7406
+#            - Path=/get
+            #通过时间匹配转发，表示请求时间在2021-01-09T23:30+08:00[Asia/Shanghai]之后才会被路由
+            #除了After，还有Before(在某个时间点之前),Between(在两个时间点之间)
+            - After=2021-01-09T23:30+08:00[Asia/Shanghai]
+#      discovery:
+#        locator:
+#          enabled: true  #开启自动代理
   application:
     name: gateway
 
@@ -16,7 +19,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8001/eureka
+      defaultZone: http://localhost:8001/eureka.
     fetch-registry: true
     register-with-eureka: true
 
