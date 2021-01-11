@@ -9,6 +9,17 @@ spring:
             #通过时间匹配转发，表示请求时间在2021-01-09T23:30+08:00[Asia/Shanghai]之后才会被路由
             #除了After，还有Before(在某个时间点之前),Between(在两个时间点之间)
             - After=2021-01-09T23:30+08:00[Asia/Shanghai]
+            # 表示只给GET请求进行路由
+            #- Method=GET
+            #通过请求路径匹配，只要满足一下规则，都会被请求转发
+            #- Path=/login/get
+            #表示请求中一定要有name参数才会进行转发，否则不进行转发
+            #- Query=name
+            #也可以指定参数和参数的值，例如参数的key为name，value必要要以java开始
+            #- Query=name,java.*
+          #这个过滤器就是请求转发路由的时候，自动额外添加参数
+          #filters:
+            #- AddRequestParameter=name,zhang
 #      discovery:
 #        locator:
 #          enabled: true  #开启自动代理
